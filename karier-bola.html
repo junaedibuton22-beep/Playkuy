@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karier Bola</title>
+<style>
+:root{--bg:#eef3e6;--ink:#16241b;--mute:#5c6b60;--card:#fbfdf6;--line:#d3dfc4;--pitch:#1f7a45;--hot:#d9482a;--gold:#b8860b;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a12;--ink:#eaf3e2;--mute:#9db1a2;--card:#15271b;--line:#27402f;--pitch:#3fbf72;--hot:#f0643f;--gold:#f2b134}}
+:root[data-theme="dark"]{--bg:#0d1a12;--ink:#eaf3e2;--mute:#9db1a2;--card:#15271b;--line:#27402f;--pitch:#3fbf72;--hot:#f0643f;--gold:#f2b134}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+#app{max-width:480px;margin:0 auto;padding:18px 16px 40px}
+h1{font:900 44px/1 Impact,Haettenschweiler,"Arial Narrow Bold",sans-serif;margin:8px 0 6px}
+h2{font-size:20px;margin:18px 0 8px}
+p{margin:0 0 12px}
+.m{color:var(--mute);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+button,.b{font:700 16px system-ui,sans-serif;border:0;border-radius:12px;padding:14px 16px;background:var(--pitch);color:#fff;width:100%;margin-bottom:8px;text-align:left}
+button.o{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+button.o.on{border-color:var(--pitch);background:color-mix(in srgb,var(--pitch) 16%,var(--card))}
+button.c{text-align:center}
+button.h{background:var(--hot)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row button{margin:0}
+input[type=text]{width:100%;font:600 17px system-ui,sans-serif;padding:12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.jer{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 48px Impact,Haettenschweiler,sans-serif;color:#fff;margin:0 auto 10px;border:4px solid rgba(255,255,255,.7)}
+.top{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.top .jer{width:56px;height:56px;font-size:28px;margin:0;flex:none;border-width:3px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--pitch)}
+.att{display:grid;grid-template-columns:90px 1fr 28px;gap:8px;align-items:center;font-size:14px;margin:5px 0}
+.sc{font:900 40px Impact,sans-serif;text-align:center;margin:6px 0}
+.res{padding:12px;border-radius:10px;background:color-mix(in srgb,var(--gold) 20%,var(--card));margin-bottom:12px;font-weight:600}
+.pt{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:6px}.ring{transform-box:fill-box;transform-origin:center;animation:pl 1.3s ease-out infinite}@keyframes pl{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.3)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const CL=[{n:'Laskar Pantai FC',s:50,c:'#2a9d8f'},{n:'Rajawali Muda',s:55,c:'#c99a1b'},{n:'Banteng Timur',s:60,c:'#d6532f'},{n:'Naga Selatan',s:66,c:'#4f8a3a'},{n:'Harimau Utara',s:72,c:'#d17a2b'},{n:'Garuda Kota FC',s:78,c:'#c1121f'},{n:'Bintang Nusantara',s:84,c:'#2f6fe0'},{n:'Atlas Royal',s:90,c:'#7b2cbf'}];
+const POS={FWD:'Penyerang',MID:'Gelandang',DEF:'Bek',GK:'Kiper'};
+const AL={pac:'Kecepatan',sho:'Tembakan',pas:'Umpan',def:'Bertahan',phy:'Fisik'};
+const WT={FWD:{sho:.35,pac:.25,pas:.15,phy:.15,def:.1},MID:{pas:.35,sho:.15,pac:.15,def:.2,phy:.15},DEF:{def:.4,phy:.25,pac:.15,pas:.15,sho:.05},GK:{def:.5,phy:.2,pas:.15,pac:.1,sho:.05}};
+const OPT={
+FWD:[['Tembak keras','sho',-.05,'goal'],['Gocek lalu tembak','pac',-.12,'goal'],['Umpan ke rekan','pas',.1,'assist']],
+MID:[['Umpan terobosan','pas',-.02,'assist'],['Tembakan jarak jauh','sho',-.15,'goal'],['Rebut bola','def',.05,'save']],
+DEF:[['Tekel bersih','def',0,'save'],['Adu fisik','phy',.05,'save'],['Bangun serangan','pas',-.05,'assist']],
+GK:[['Tepis bola','def',0,'save'],['Keluar menangkap bola','phy',-.05,'save'],['Lempar cepat','pas',-.1,'assist']]};
+const SA=['Bola liar jatuh di depanmu di kotak penalti!','Rekan mengirim umpan silang ke arahmu!','Ruang terbuka lebar di depanmu!'];
+const SD=['Lawan melepas serangan balik cepat!','Bola atas mengarah ke areamu!','Penyerang lawan berlari sendirian!'];
+const $=id=>document.getElementById(id),A=$('app');
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const ovr=(a,p)=>Math.round(Object.keys(WT[p]).reduce((t,k)=>t+a[k]*WT[p][k],0));
+let S=null,C={name:'Pemain Muda',pos:'FWD',num:10,club:0},scr='home',M=null;
+function save(){try{localStorage.setItem('karierbola',JSON.stringify(S))}catch(e){}}
+function load(){try{const v=localStorage.getItem('karierbola');return v?JSON.parse(v):null}catch(e){return null}}
+const jer=(n,c,cls)=>'<div class="jer" style="background:'+c+'">'+n+'</div>';
+function pitch(pos,col,num,ball){
+  const T=[[22,75],[68,25],[68,58],[68,92],[68,125],[135,35],[135,75],[135,115],[205,28],[215,75],[205,122]],sl={GK:0,DEF:2,MID:6,FWD:9}[pos];
+  const cp={GK:'Kiper: menjaga gawang di area paling belakang',DEF:'Bek: menjaga lini belakang dan menghentikan penyerang lawan',MID:'Gelandang: pengatur serangan di tengah lapangan',FWD:'Penyerang: berada paling depan untuk mencetak gol'}[pos];
+  let s='<svg class="pt" viewBox="0 0 300 150" role="img" aria-label="Posisi pemain di lapangan"><rect width="300" height="150" fill="#2f8f55"/><rect x="50" width="50" height="150" fill="#2a834e"/><rect x="150" width="50" height="150" fill="#2a834e"/><rect x="250" width="50" height="150" fill="#2a834e"/><g fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"><rect x="4" y="4" width="292" height="142"/><path d="M150 4V146"/><circle cx="150" cy="75" r="20"/><rect x="4" y="38" width="38" height="74"/><rect x="258" y="38" width="38" height="74"/><rect x="4" y="60" width="12" height="30"/><rect x="284" y="60" width="12" height="30"/></g>';
+  T.forEach((p,i)=>{if(i!==sl)s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="5.5" fill="'+col+'" stroke="#fff" stroke-width="1.2" opacity=".9"/>'});
+  const q=T[sl];
+  if(ball)s+='<circle cx="'+(ball==='a'?240:50)+'" cy="75" r="4.5" fill="#fff" stroke="#111" stroke-width="1.2"/>';
+  s+='<circle class="ring" cx="'+q[0]+'" cy="'+q[1]+'" r="11" fill="none" stroke="#ffd166" stroke-width="2"/><circle cx="'+q[0]+'" cy="'+q[1]+'" r="11" fill="'+col+'" stroke="#fff" stroke-width="2"/><text x="'+q[0]+'" y="'+(q[1]+4)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#fff" font-family="Impact,sans-serif">'+num+'</text><text x="'+q[0]+'" y="'+(q[1]-16)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#ffd166" stroke="#0b1a10" stroke-width="2.5" paint-order="stroke">KAMU</text></svg>';
+  return '<div class="card" style="padding:8px 8px 10px">'+s+'<div class="m" style="text-align:center">'+cp+'</div></div>';
+}
+function head(){const c=CL[S.club];return '<div class="top">'+jer(S.num,c.c)+'<div><b>'+esc(S.name)+'</b><div class="m">'+POS[S.pos]+' · '+c.n+'<br>Usia '+S.age+' · OVR '+ovr(S.att,S.pos)+' · Musim '+S.season+'</div></div></div>'}
+function attrs(){return Object.keys(AL).map(k=>'<div class="att"><span>'+AL[k]+'</span><div class="bar"><i style="width:'+S.att[k]+'%"></i></div><b>'+S.att[k]+'</b></div>').join('')}
+function go(s){scr=s;render();scrollTo(0,0)}
+let AC=null,mute=false;try{mute=localStorage.getItem('kbmute')==='1'}catch(e){}
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d,ty,v,t0,f2){const a=ac();if(!a)return;const t=a.currentTime+(t0||0),o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v||.2,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d,v,t0,fl){const a=ac();if(!a)return;const n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=Math.random()*2-1;const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain(),t=a.currentTime+(t0||0);s.buffer=b;f.type='bandpass';f.frequency.value=fl||1200;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+Math.min(.3,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(a.destination);s.start(t)}
+function arp(ns,st,ty,v){ns.forEach((f,i)=>tone(f,.28,ty||'triangle',v||.16,i*st))}
+function sfx(k){
+  if(mute)return;
+  if(k==='click')tone(660,.06,'square',.05);
+  else if(k==='whistle'){tone(2500,.3,'triangle',.12);tone(2700,.35,'triangle',.12,.38)}
+  else if(k==='goal'){noise(1.8,.3,0,900);arp([523,659,784,1047],.1)}
+  else if(k==='assist'){tone(660,.12,'triangle',.15);tone(880,.2,'triangle',.15,.1);noise(.7,.12,0,900)}
+  else if(k==='save'){tone(180,.18,'sine',.3,0,80);tone(900,.12,'triangle',.1,.1)}
+  else if(k==='conc'){tone(300,.45,'sawtooth',.1,0,110);noise(.6,.1,0,500)}
+  else if(k==='miss'){noise(.25,.12,0,300);tone(200,.22,'square',.05,0,110)}
+  else if(k==='win'){noise(2,.28,0,900);arp([523,659,784,1047,1319],.11)}
+  else if(k==='lose'){[400,330,262].forEach((f,i)=>tone(f,.4,'sine',.15,i*.28))}
+  else if(k==='whistle2'){tone(2500,.3,'triangle',.12);tone(2500,.3,'triangle',.12,.4);tone(2500,.5,'triangle',.12,.8)}
+  else if(k==='trophy'){noise(2.4,.3,0,900);arp([523,659,784,1047,784,1047,1319],.13,'triangle',.18)}
+  else if(k==='move'){noise(.3,.1,0,2500);tone(500,.25,'triangle',.1,0,900)}
+}
+document.addEventListener('click',e=>{if(e.target.closest('button'))sfx('click')});
+const mb=document.createElement('button');
+mb.setAttribute('style','position:fixed;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);width:auto;margin:0;padding:8px 12px;font-size:18px;border-radius:20px;z-index:5');
+mb.className='o c';
+mb.setAttribute('aria-label','Suara');
+mb.textContent=mute?'🔇':'🔊';
+mb.onclick=()=>{mute=!mute;mb.textContent=mute?'🔇':'🔊';try{localStorage.setItem('kbmute',mute?'1':'0')}catch(e){}};
+document.body.appendChild(mb);
+
+function render(){
+  let h='';
+  if(scr==='home'){
+    const sv=load();
+    h='<h1>KARIER BOLA</h1><p class="m">Mulai dari remaja 17 tahun. Pilih nomor punggung, posisi, dan klub, lalu bangun kariermu sampai jadi legenda.</p><button class="c" onclick="go(\'create\')">Mulai karier baru</button>'+(sv?'<button class="o c" onclick="S=load();go(S.over?\'retire\':\'train\')">Lanjutkan karier ('+esc(sv.name)+')</button>':'');
+  }
+  else if(scr==='create'){
+    h='<h2>Buat pemain</h2><div class="card"><div class="m">Nama</div><input type="text" maxlength="18" value="'+esc(C.name)+'" oninput="C.name=this.value"></div>'
+    +'<div class="card"><div class="m" style="text-align:center">Nomor punggung</div>'+jer(C.num,CL[C.club].c)+'<div class="row"><button class="o c" onclick="C.num=C.num>1?C.num-1:99;render()">− 1</button><button class="o c" onclick="C.num=C.num<99?C.num+1:1;render()">+ 1</button></div></div>'
+    +'<div class="card"><div class="m">Posisi</div><div class="row">'+Object.keys(POS).map(p=>'<button class="o c '+(C.pos===p?'on':'')+'" onclick="C.pos=\''+p+'\';render()">'+POS[p]+'</button>').join('')+'</div></div>'
+    +pitch(C.pos,CL[C.club].c,C.num)+'<div class="card"><div class="m">Klub pertama</div>'+CL.slice(0,4).map((c,i)=>'<button class="o '+(C.club===i?'on':'')+'" onclick="C.club='+i+';render()">'+c.n+' <span class="m">· kekuatan '+c.s+'</span></button>').join('')+'</div>'
+    +'<button class="c" onclick="newCareer()">Mulai karier</button>';
+  }
+  else if(scr==='train'){
+    h=head()+pitch(S.pos,CL[S.club].c,S.num)+'<div class="card">'+attrs()+'</div><h2>Latihan pra-musim</h2><p class="m">Pilih satu kemampuan untuk dilatih khusus.</p>'+Object.keys(AL).map(k=>'<button class="o" onclick="train(\''+k+'\')">Latih '+AL[k]+'</button>').join('');
+  }
+  else if(scr==='ko'){
+    const o=CL[M.opp],c=CL[S.club],sm=S.sm;
+    h=head()+pitch(S.pos,c.c,S.num)+'<div class="card"><div class="m">Pekan '+(sm.m+1)+' dari 7</div><div class="sc" style="font-size:28px">'+c.n+'<br>vs<br>'+o.n+'</div></div><div class="card m">Poin: '+sm.pts+' · Gol: '+sm.g+' · Assist: '+sm.a+'</div><button class="c" onclick="sfx(\'whistle\');go(\'mom\')">Kick off</button>';
+  }
+  else if(scr==='mom'){
+    const m=M.min[M.k];
+    h=pitch(S.pos,CL[S.club].c,S.num,M.d?'d':'a')+'<div class="card"><div class="m">Menit '+m+' · Peluang '+(M.k+1)+' dari 3</div><p style="font-size:19px;font-weight:700;margin:8px 0 0">'+M.txt+'</p></div>';
+    if(M.res)h+='<div class="res">'+M.res+'</div><button class="c" onclick="nextMom()">Lanjut</button>';
+    else h+=OPT[S.pos].map((o,i)=>'<button class="o" onclick="act('+i+')">'+o[0]+'<div class="m">Andalkan '+AL[o[1]]+' ('+S.att[o[1]]+')</div></button>').join('');
+  }
+  else if(scr==='full'){
+    const r=M.r,c=CL[S.club],o=CL[M.opp];
+    h='<div class="card"><div class="m" style="text-align:center">Peluit akhir</div><div class="sc">'+r.f+' – '+r.a+'</div><p style="text-align:center;margin:0" class="m">'+c.n+' vs '+o.n+'</p></div>'
+    +'<div class="card"><b>'+(r.f>r.a?'Menang':r.f<r.a?'Kalah':'Seri')+'</b><br>Gol: '+M.g+' · Assist: '+M.a+' · Aksi bertahan sukses: '+M.sv+'<br>Rating pertandingan: <b>'+r.rt.toFixed(1)+'</b></div><button class="c" onclick="afterMatch()">Lanjut</button>';
+  }
+  else if(scr==='season'){
+    const q=S.last;
+    h=head()+'<h2>Akhir musim '+S.season+'</h2><div class="card">Peringkat liga: <b>'+q.rank+' dari 8</b> · Poin '+q.pts+'<br>Gol '+q.g+' · Assist '+q.a+'<br>Rating rata-rata: <b>'+q.rt.toFixed(2)+'</b>'+(q.title?'<br><b style="color:var(--gold)">'+q.title+'</b>':'')+'</div>'
+    +'<h2>Tawaran klub</h2>'+q.offers.map(i=>'<button class="o" onclick="move('+i+')">Pindah ke '+CL[i].n+'<div class="m">Kekuatan '+CL[i].s+'</div></button>').join('')
+    +'<button class="o" onclick="move('+S.club+')">Bertahan di '+CL[S.club].n+'</button>'+'<button class="h c" onclick="retire()">Pensiun sekarang</button>';
+  }
+  else if(scr==='retire'){
+    const sc=S.g*2+S.a*1.5+S.tr*30+S.aw*40,t=sc<100?'Pemain Biasa':sc<250?'Bintang Klub':sc<500?'Idola Bangsa':'Legenda Dunia';
+    h='<h1>PENSIUN</h1><div class="card" style="text-align:center">'+jer(S.num,CL[S.club].c)+'<b>'+esc(S.name)+'</b><div class="m">'+POS[S.pos]+' · '+S.season+' musim</div><div class="sc" style="color:var(--gold)">'+t+'</div></div>'
+    +'<div class="card">Gol: <b>'+S.g+'</b> · Assist: <b>'+S.a+'</b><br>Gelar juara liga: <b>'+S.tr+'</b><br>Pemain terbaik musim ini: <b>'+S.aw+'</b><br>Klub: '+S.clubs.map(i=>CL[i].n).join(' → ')+'</div><button class="c" onclick="S=null;try{localStorage.removeItem(\'karierbola\')}catch(e){}go(\'home\')">Karier baru</button>';
+  }
+  A.innerHTML=h;
+}
+
+function newCareer(){
+  if(!C.name.trim())C.name='Pemain Muda';
+  const att={pac:rnd(50,58),sho:rnd(50,58),pas:rnd(50,58),def:rnd(50,58),phy:rnd(50,58)};
+  Object.keys(WT[C.pos]).forEach(k=>{if(WT[C.pos][k]>=.25)att[k]+=8});
+  S={name:C.name.trim(),pos:C.pos,num:C.num,club:C.club,age:17,att,season:1,g:0,a:0,tr:0,aw:0,clubs:[C.club],over:false};
+  save();go('train');
+}
+function train(k){S.att[k]=cl(S.att[k]+rnd(2,4),30,99);startSeason()}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+function startSeason(){
+  S.sm={m:0,opps:shuffle(CL.map((c,i)=>i).filter(i=>i!==S.club)),pts:0,g:0,a:0,rt:[]};
+  nextMatch();
+}
+function nextMatch(){M={opp:S.sm.opps[S.sm.m],k:0,g:0,a:0,sv:0,conc:0,s:0,f:0,res:'',min:[rnd(8,20),rnd(35,48),rnd(62,85)]};setTxt();go('ko')}
+function setTxt(){const d=S.pos==='DEF'||S.pos==='GK'||(S.pos==='MID'&&Math.random()<.4);M.d=d;M.txt=(d?SD:SA)[rnd(0,2)]}
+function act(i){
+  const o=OPT[S.pos][i],opp=CL[M.opp],c=CL[S.club];
+  const p=cl(.25+S.att[o[1]]/100*.55+o[2]+(c.s-opp.s)/300,.1,.92);
+  if(Math.random()<p){
+    M.s++;
+    if(o[3]==='goal'){M.g++;M.res='GOL! Kamu mencetak gol!';sfx('goal')}
+    else if(o[3]==='assist'){M.a++;M.res='ASSIST! Rekan menyelesaikan umpanmu jadi gol.';sfx('assist')}
+    else{M.sv++;M.res='Berhasil! Serangan lawan kamu patahkan.';sfx('save')}
+  }else{
+    M.f++;
+    if(o[3]==='save'&&Math.random()<.6){M.conc++;M.res='Gagal. Lawan lolos dan mencetak gol.';sfx('conc')}
+    else{M.res='Gagal. Peluang terbuang.';sfx('miss')}
+  }
+  render();
+}
+function nextMom(){
+  M.k++;M.res='';
+  if(M.k<3){setTxt();render();return}
+  const o=CL[M.opp],c=CL[S.club],d=c.s-o.s;
+  const tr=n=>{let x=0;for(let i=0;i<3;i++)if(Math.random()<cl(n/3,.05,.75))x++;return x};
+  const f=M.g+M.a+tr(cl(1+d/40,.2,2.2)),a=Math.max(0,tr(cl(1-d/40,.2,2.2))-M.sv)+M.conc;
+  const rt=cl(6+M.s*.8-M.f*.3+(f>a?.3:f<a?-.3:0)+(rnd(-3,3)/10),4.5,10);
+  M.r={f,a,rt};setTimeout(()=>sfx(f>a?'win':f<a?'lose':'whistle2'),150);
+  const sm=S.sm;sm.pts+=f>a?3:f===a?1:0;sm.g+=M.g;sm.a+=M.a;sm.rt.push(rt);
+  S.g+=M.g;S.a+=M.a;save();go('full');
+}
+function afterMatch(){
+  const sm=S.sm;sm.m++;
+  if(sm.m<7){nextMatch();return}
+  const pts=CL.map((c,i)=>{if(i===S.club)return sm.pts;let p=0;for(let k=0;k<7;k++){const w=cl(.5+(c.s-70)/70,.1,.9),r=Math.random();p+=r<w*.78?3:r<w*.78+.22?1:0}return p});
+  const rank=1+pts.filter(p=>p>sm.pts).length,avg=sm.rt.reduce((t,v)=>t+v,0)/7;
+  let title='';
+  if(rank===1){S.tr++;title='Juara liga!';sfx('trophy')}
+  if(avg>=8){S.aw++;title+=(title?' ':'')+'Pemain terbaik musim ini!'}
+  const lim=CL[S.club].s+Math.max(0,avg-6.6)*9+4;
+  const offers=CL.map((c,i)=>i).filter(i=>i!==S.club&&CL[i].s<=lim).sort((x,y)=>CL[y].s-CL[x].s).slice(0,3);
+  S.last={rank,pts:sm.pts,g:sm.g,a:sm.a,rt:avg,title,offers};save();go('season');
+}
+function move(i){sfx('move');
+  if(i!==S.club){S.club=i;S.clubs.push(i)}
+  S.age++;S.season++;
+  Object.keys(S.att).forEach(k=>{let d;if(S.age<=23)d=rnd(1,3);else if(S.age<=29)d=rnd(0,1);else d=-rnd(0,2)-((k==='pac'||k==='phy')&&S.age>32?1:0);S.att[k]=cl(S.att[k]+d,30,99)});
+  if(S.age>=36){retire();return}
+  save();go('train');
+}
+function retire(){S.over=true;save();go('retire')}
+render();
+</script>
+</body>
+</html>
