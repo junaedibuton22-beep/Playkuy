@@ -69,6 +69,42 @@ select{flex:none;font:600 14px system-ui,sans-serif;padding:8px 10px;border-radi
 .fit{display:none;flex-wrap:wrap;gap:5px}
 @media (min-width:700px){.fit{display:flex}}
 .fit span{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
+.search{min-width:0}
+[hidden]{display:none!important}
+/* Tombol melayang Traktir Kopi */
+.fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);z-index:40;display:inline-flex;align-items:center;gap:10px;padding:14px 22px 14px 16px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:800 17px/1 system-ui,sans-serif;box-shadow:0 10px 28px rgba(255,107,53,.45),0 2px 6px rgba(0,0,0,.25);cursor:pointer;transition:transform .15s ease}
+.fab .em{font-size:28px;line-height:1}
+.fab:active{transform:scale(.96)}
+@media (hover:hover){.fab:hover{transform:translateY(-3px)}}
+@media (min-width:700px){.fab{right:28px;bottom:calc(env(safe-area-inset-bottom,0px) + 100px);padding:16px 26px 16px 20px;font-size:18px}}
+.fab::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(255,183,3,.55);animation:pl 2.6s ease-out infinite;pointer-events:none}
+@keyframes pl{70%,100%{box-shadow:0 0 0 16px rgba(255,183,3,0)}}
+@media (prefers-reduced-motion:reduce){.fab::after{animation:none}}
+/* Modal Traktir Kopi */
+.mdl{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));background:rgba(8,12,24,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fd .18s ease}
+.mdl .box{position:relative;width:100%;max-width:460px;max-height:calc(100dvh - 32px);overflow-y:auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:22px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:pp .2s ease}
+.mdl h2{margin:0 36px 12px 0;font-size:24px;line-height:1.25}
+.mdl .x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:0;background:var(--bg);color:var(--ink);font-size:17px;cursor:pointer}
+.mdl .mm{margin:0 0 14px;color:var(--mute);font-size:15.5px}
+.mdl .sm{font-size:12.5px;margin:12px 0}
+.mdl .lb{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.amt{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:0 14px;background:var(--bg)}
+.amt:focus-within{border-color:var(--brand)}
+.amt span{font-weight:800;color:var(--mute)}
+.amt input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:800 28px system-ui,sans-serif;padding:14px 0}
+.qk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 4px}
+.qk button{font:700 14px system-ui,sans-serif;padding:11px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.err{min-height:20px;margin:6px 0 8px;color:#d92d20;font-size:13px;font-weight:600}
+.mdl .go{width:100%;font:800 18px system-ui,sans-serif;padding:16px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;cursor:pointer}
+.thx{margin:0 0 8px;font-weight:700;font-size:17px;line-height:1.4}
+.qrb{background:#fff;border-radius:16px;padding:6px;margin:0 auto;max-width:340px}
+.qrb img{display:block;width:100%;height:auto;border-radius:12px}
+.qrb p{margin:0;padding:24px 12px;color:#444;font-size:13px;text-align:center}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.alt{display:block;text-align:center;text-decoration:none;font:700 14px system-ui,sans-serif;padding:11px 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+@keyframes fd{from{opacity:0}}
+@keyframes pp{from{opacity:0;transform:translateY(10px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.mdl,.mdl .box{animation:none}}
 /* Slot "segera hadir" */
 .soon{display:flex;align-items:center;justify-content:center;text-align:center;min-height:170px;border:2px dashed var(--line);border-radius:16px;color:var(--mute);font-size:14px;font-weight:600;padding:16px}
 .more{display:block;margin:22px auto 0;font:700 15px system-ui,sans-serif;padding:12px 28px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -108,6 +144,38 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
 </main>
 
 <footer><div class="wrap">© <span id="yr"></span> PlayKuy · Portal game browser</div></footer>
+
+<button class="fab" type="button" data-kopi aria-haspopup="dialog" aria-label="Traktir Kopi"><span class="em" aria-hidden="true">☕</span><span>Traktir Kopi</span></button>
+
+<!-- ☕ Modal Traktir Kopi. Gambar QR dibaca dari file "qr-dana.png" (satu folder dengan index.html) -->
+<div class="mdl" id="kopi" hidden role="dialog" aria-modal="true" aria-labelledby="kTitle">
+  <div class="box">
+    <button class="x" id="kClose" type="button" aria-label="Tutup">✕</button>
+    <h2 id="kTitle">☕ Traktir Kopi PlayKuy</h2>
+    <div id="kForm">
+      <p class="mm">Dukungan ini sepenuhnya sukarela. Semua game tetap gratis dimainkan, dengan atau tanpa dukungan, dan berapa pun nominalnya kami berterima kasih.</p>
+      <label class="lb" for="kAmt">Nominal dukungan (Rupiah)</label>
+      <div class="amt"><span>Rp</span><input id="kAmt" inputmode="numeric" autocomplete="off" placeholder="10.000"></div>
+      <div class="qk">
+        <button type="button" data-nom="5000">5.000</button><button type="button" data-nom="10000">10.000</button>
+        <button type="button" data-nom="20000">20.000</button><button type="button" data-nom="50000">50.000</button>
+      </div>
+      <p class="err" id="kErr" role="alert"></p>
+      <button class="go" id="kGo" type="button">Lanjutkan Pembayaran</button>
+    </div>
+    <div id="kQR" hidden>
+      <p class="thx">🙏 Terima kasih sudah ingin mendukung PlayKuy! Dukungan kamu sangat berarti. ❤️</p>
+      <p class="mm">Silakan selesaikan pembayaran dengan memindai QR di bawah ini.</p>
+      <div class="qrb">
+        <img id="kImg" alt="QR pembayaran DANA PlayKuy" width="300" height="300">
+        <p id="kImgErr" hidden>Gambar QR belum ditemukan. Pastikan file qr-dana.png ada di folder yang sama dengan index.html.</p>
+      </div>
+      <p class="mm sm">Nominal yang kamu pilih: <b id="kNom"></b>. QR ini hanya bisa dibayar pakai DANA. Isi nominalnya sendiri di aplikasi DANA setelah memindai. Halaman ini tidak memverifikasi pembayaran secara otomatis.</p>
+      <div class="row2"><a class="alt" id="kDl" href="qr-dana.png" download="qr-dana-playkuy.png">Unduh QR</a><button class="alt" id="kBack" type="button">Ubah nominal</button></div>
+      <button class="go" id="kClose2" type="button">Tutup</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* =====================================================================
@@ -228,6 +296,52 @@ $('sort').addEventListener('change', e => { state.sort=e.target.value; state.sho
 more.addEventListener('click', () => { state.shown += PAGE; render() });
 $('yr').textContent = new Date().getFullYear();
 buildChips(); render();
+
+/* ☕ TRAKTIR KOPI
+   Hanya menampilkan QR dari file qr-dana.png. Tidak ada verifikasi pembayaran. */
+const QR_FILE = 'qr-dana.png', MIN_NOMINAL = 1000, MAX_NOMINAL = 100000000;
+const kopi=$('kopi'), kForm=$('kForm'), kQR=$('kQR'), kAmt=$('kAmt'), kErr=$('kErr'), kImg=$('kImg');
+let kLast = null;
+const rp = n => 'Rp' + n.toLocaleString('id-ID');
+const nominal = () => parseInt(kAmt.value.replace(/\D/g,''),10) || 0;
+function showForm(){ kForm.hidden=false; kQR.hidden=true; kErr.textContent=''; }
+function openKopi(){
+  kLast = document.activeElement; showForm(); kopi.hidden=false; document.body.style.overflow='hidden';
+  setTimeout(()=>kAmt.focus(), 60);
+}
+function closeKopi(){
+  kopi.hidden=true; document.body.style.overflow='';
+  if (kLast && kLast.focus) kLast.focus();
+}
+document.querySelectorAll('[data-kopi]').forEach(b => b.addEventListener('click', openKopi));
+$('kClose').onclick = $('kClose2').onclick = closeKopi;
+$('kBack').onclick = () => { showForm(); kAmt.focus(); };
+kopi.addEventListener('click', e => { if (e.target === kopi) closeKopi(); });
+kAmt.addEventListener('input', () => { const n=nominal(); kAmt.value = n ? n.toLocaleString('id-ID') : ''; kErr.textContent=''; });
+document.querySelectorAll('[data-nom]').forEach(b => b.onclick = () => { kAmt.value=(+b.dataset.nom).toLocaleString('id-ID'); kErr.textContent=''; kAmt.focus(); });
+$('kGo').onclick = () => {
+  const n = nominal();
+  if (n < MIN_NOMINAL) { kErr.textContent = 'Masukkan nominal minimal ' + rp(MIN_NOMINAL) + '.'; kAmt.focus(); return; }
+  if (n > MAX_NOMINAL) { kErr.textContent = 'Nominal terlalu besar. Maksimal ' + rp(MAX_NOMINAL) + '.'; kAmt.focus(); return; }
+  $('kNom').textContent = rp(n);
+  $('kImgErr').hidden = true; kImg.hidden = false;
+  kImg.onerror = () => { kImg.hidden = true; $('kImgErr').hidden = false; };
+  kImg.src = QR_FILE;
+  kForm.hidden = true; kQR.hidden = false;
+  kQR.scrollIntoView({block:'nearest'});
+};
+kAmt.addEventListener('keydown', e => { if (e.key === 'Enter') $('kGo').click(); });
+document.addEventListener('keydown', e => {
+  if (kopi.hidden) return;
+  if (e.key === 'Escape') { closeKopi(); return; }
+  if (e.key === 'Tab') {   // jaga fokus tetap di dalam popup
+    const f = [...kopi.querySelectorAll('button,a[href],input')].filter(x => !x.closest('[hidden]') && !x.disabled);
+    if (!f.length) return;
+    const a=f[0], z=f[f.length-1];
+    if (e.shiftKey && document.activeElement===a) { e.preventDefault(); z.focus(); }
+    else if (!e.shiftKey && document.activeElement===z) { e.preventDefault(); a.focus(); }
+  }
+});
 </script>
 </body>
 </html>
