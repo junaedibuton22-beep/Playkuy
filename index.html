@@ -215,6 +215,10 @@ const GAMES = [
     deskripsi:'Pilih arah tendangan dan cetak gol sebanyak mungkin. Gantian jadi penendang dan kiper sesuai aturan adu penalti.',
     fitur:['Penendang dan kiper','Mode tantangan','SFX'],
     cover:'cover-adu-penalti.svg', tgl:'2026-11-13' },
+  { file:'balap-mobil.html', judul:'Balap Hindari Mobil', kategori:'Balap',
+    deskripsi:'Mobilmu terus melaju. Geser jalur untuk menghindari kendaraan lain, ambil koin dan perisai, dan bertahan sejauh mungkin.',
+    fitur:['Tema siang dan malam','Koin dan perisai','SFX'],
+    cover:'cover-balap-mobil.svg', tgl:'2026-11-13' },
   // ↓ TAMBAHKAN GAME BARU DI SINI ↓
 ];
 
@@ -318,7 +322,7 @@ function closeKopi(){
   if (kLast && kLast.focus) kLast.focus();
 }
 document.querySelectorAll('[data-kopi]').forEach(b => b.addEventListener('click', openKopi));
-$('kClose').onclick = $('kClose2').onclick = closeKopi
+$('kClose').onclick = $('kClose2').onclick = closeKopi;
 $('kBack').onclick = () => { showForm(); kAmt.focus(); };
 kopi.addEventListener('click', e => { if (e.target === kopi) closeKopi(); });
 kAmt.addEventListener('input', () => { const n=nominal(); kAmt.value = n ? n.toLocaleString('id-ID') : ''; kErr.textContent=''; });
@@ -348,4 +352,4 @@ document.addEventListener('keydown', e => {
 });
 </script>
 </body>
-  </html
+</html>
