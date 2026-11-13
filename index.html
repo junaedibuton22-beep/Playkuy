@@ -211,6 +211,10 @@ const GAMES = [
     deskripsi:'Pilih nomor punggung, posisi, dan klub. Bangun kariermu dari remaja sampai jadi legenda sepak bola.',
     fitur:['Mode karier','SFX','Simpan otomatis'],
     cover:'cover-karier-bola.svg', tgl:'2026-11-13' },
+  { file:'adu-penalti.html', judul:'Adu Penalti', kategori:'Olahraga',
+    deskripsi:'Pilih arah tendangan dan cetak gol sebanyak mungkin. Gantian jadi penendang dan kiper sesuai aturan adu penalti.',
+    fitur:['Penendang dan kiper','Mode tantangan','SFX'],
+    cover:'cover-adu-penalti.svg', tgl:'2026-11-13' },
   // ↓ TAMBAHKAN GAME BARU DI SINI ↓
 ];
 
@@ -314,7 +318,7 @@ function closeKopi(){
   if (kLast && kLast.focus) kLast.focus();
 }
 document.querySelectorAll('[data-kopi]').forEach(b => b.addEventListener('click', openKopi));
-$('kClose').onclick = $('kClose2').onclick = closeKopi;
+$('kClose').onclick = $('kClose2').onclick = closeKopi
 $('kBack').onclick = () => { showForm(); kAmt.focus(); };
 kopi.addEventListener('click', e => { if (e.target === kopi) closeKopi(); });
 kAmt.addEventListener('input', () => { const n=nominal(); kAmt.value = n ? n.toLocaleString('id-ID') : ''; kErr.textContent=''; });
@@ -344,4 +348,4 @@ document.addEventListener('keydown', e => {
 });
 </script>
 </body>
-</html>
+  </html
