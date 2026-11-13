@@ -66,6 +66,9 @@ select{flex:none;font:600 14px system-ui,sans-serif;padding:8px 10px;border-radi
 .tag{font-size:12px;color:var(--mute);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .play{flex:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font-weight:800;font-size:13px;padding:7px 14px;border-radius:999px}
 
+.fit{display:none;flex-wrap:wrap;gap:5px}
+@media (min-width:700px){.fit{display:flex}}
+.fit span{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
 /* Slot "segera hadir" */
 .soon{display:flex;align-items:center;justify-content:center;text-align:center;min-height:170px;border:2px dashed var(--line);border-radius:16px;color:var(--mute);font-size:14px;font-weight:600;padding:16px}
 .more{display:block;margin:22px auto 0;font:700 15px system-ui,sans-serif;padding:12px 28px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -125,15 +128,20 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
      kategori  (wajib)  mis. "Fighter", "Olahraga", "Puzzle", "Balap"
      deskripsi (opsional) satu-dua kalimat, tampil di layar lebar
      cover     (opsional) nama file cover bila tidak mengikuti aturan otomatis
-     tgl       (opsional) "TTTT-BB-HH". Dipakai untuk urutan "Terbaru" dan
-               label BARU (14 hari pertama)
+     tgl       (opsional) "TTTT-BB-HH", tanggal game dirilis. Label BARU tampil 14 hari.
+     update    (opsional) "TTTT-BB-HH", tanggal pembaruan terakhir. Label UPDATE
+               tampil 14 hari. Urutan "Terbaru" memakai tanggal yang paling baru.
+     fitur     (opsional) daftar label singkat, mis. ['6 karakter','SFX'].
+               Tampil sebagai pil kecil di layar lebar dan ikut bisa dicari.
    ===================================================================== */
 const GAMES = [
   { file:'jagoan-silat.html', judul:'Jagoan Silat', kategori:'Fighter',
-    deskripsi:'Duel silat di pantai senja. Menangkan 2 dari 3 ronde, lawan makin tangguh setiap kali kamu menang.',
-    cover:'cover-jagoan-silat.svg', tgl:'2026-11-12' },
+    deskripsi:'Duel silat 2 dari 3 ronde. Pilih jagoanmu dan arena favoritmu, lawan makin tangguh setiap kali kamu menang.',
+    fitur:['6 karakter','7 arena','SFX'],
+    cover:'cover-jagoan-silat.svg', tgl:'2026-11-12', update:'2026-11-13' },
   { file:'karier-bola.html', judul:'Karier Bola', kategori:'Olahraga',
     deskripsi:'Pilih nomor punggung, posisi, dan klub. Bangun kariermu dari remaja sampai jadi legenda sepak bola.',
+    fitur:['Mode karier','SFX','Simpan otomatis'],
     cover:'cover-karier-bola.svg', tgl:'2026-11-13' },
   // ↓ TAMBAHKAN GAME BARU DI SINI ↓
 ];
@@ -145,7 +153,9 @@ const grid=$('grid'), chips=$('chips'), more=$('more');
 const state = { q:'', cat:'Semua', sort:'baru', shown:PAGE };
 
 const slug = g => g.file.replace(/\.html?$/i,'');
-const isNew = g => g.tgl && (Date.now()-new Date(g.tgl))/864e5 <= 14;
+const days = d => (Date.now()-new Date(d))/864e5;
+const badge = g => g.update && days(g.update)<=14 ? 'UPDATE' : g.tgl && days(g.tgl)<=14 ? 'BARU' : '';
+const stamp = g => [g.tgl||'', g.update||''].sort().pop();
 const el = (t,c,x) => { const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e };
 const hue = s => { let h=0; for(const ch of s)h=(h*31+ch.charCodeAt(0))%360; return h };
 
@@ -165,7 +175,7 @@ function coverNode(g){
   };
   img.src = list[0];
   box.append(img);
-  if (isNew(g)) box.append(el('span','badge','BARU'));
+  if (badge(g)) box.append(el('span','badge',badge(g)));
   return box;
 }
 
@@ -175,6 +185,7 @@ function card(g){
   const meta = el('div','meta'); meta.append(el('span','tag',g.kategori), el('span','play','▶ Main'));
   bd.append(el('h3',null,g.judul));
   if (g.deskripsi) bd.append(el('p',null,g.deskripsi));
+  if (g.fitur && g.fitur.length) { const f=el('div','fit'); g.fitur.forEach(x=>f.append(el('span',null,x))); bd.append(f) }
   bd.append(meta);
   a.append(coverNode(g), bd);
   return a;
@@ -184,10 +195,10 @@ function visible(){
   const q = state.q.trim().toLowerCase();
   let list = GAMES.filter(g =>
     (state.cat==='Semua' || g.kategori===state.cat) &&
-    (!q || [g.judul,g.kategori,g.deskripsi||''].join(' ').toLowerCase().includes(q)));
+    (!q || [g.judul,g.kategori,g.deskripsi||'',(g.fitur||[]).join(' ')].join(' ').toLowerCase().includes(q)));
   list = list.slice().sort(state.sort==='az'
     ? (a,b)=>a.judul.localeCompare(b.judul,'id')
-    : (a,b)=>(b.tgl||'').localeCompare(a.tgl||'') || a.judul.localeCompare(b.judul,'id'));
+    : (a,b)=>stamp(b).localeCompare(stamp(a)) || a.judul.localeCompare(b.judul,'id'));
   return list;
 }
 
