@@ -184,7 +184,7 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
    Cara menambah game baru (3 langkah):
    1. Taruh file game (mis. "balap-motor.html") di folder yang sama dengan index.html.
    2. Taruh gambar cover di folder yang sama. Nama otomatis yang dicari:
-        cover-<nama-file-game>.svg / .png / .jpg / .webp
+        cover-<nama-file-game>.png / .jpg / .webp / .svg
         (contoh: cover-balap-motor.png). Atau tulis nama file cover sendiri
         lewat properti "cover".
    3. Tambahkan satu baris di GAMES di bawah ini. Urutan baris TIDAK berpengaruh:
@@ -206,24 +206,28 @@ const GAMES = [
   { file:'jagoan-silat.html', judul:'Jagoan Silat', kategori:'Fighter',
     deskripsi:'Duel silat 2 dari 3 ronde. Pilih jagoanmu dan arena favoritmu, lawan makin tangguh setiap kali kamu menang.',
     fitur:['6 karakter','7 arena','SFX'],
-    cover:'cover-jagoan-silat.svg', tgl:'2026-11-12', update:'2026-11-13' },
+    cover:'cover-jagoan-silat.png', tgl:'2026-11-12', update:'2026-11-13' },
   { file:'karier-bola.html', judul:'Karier Bola', kategori:'Olahraga',
     deskripsi:'Pilih nomor punggung, posisi, dan klub. Bangun kariermu dari remaja sampai jadi legenda sepak bola.',
     fitur:['Mode karier','SFX','Simpan otomatis'],
-    cover:'cover-karier-bola.svg', tgl:'2026-11-13' },
+    cover:'cover-karier-bola.png', tgl:'2026-11-13' },
   { file:'adu-penalti.html', judul:'Adu Penalti', kategori:'Olahraga',
     deskripsi:'Pilih arah tendangan dan cetak gol sebanyak mungkin. Gantian jadi penendang dan kiper sesuai aturan adu penalti.',
     fitur:['Penendang dan kiper','Mode tantangan','SFX'],
-    cover:'cover-adu-penalti.svg', tgl:'2026-11-13' },
+    cover:'cover-adu-penalti.png', tgl:'2026-11-13' },
   { file:'balap-mobil.html', judul:'Balap Hindari Mobil', kategori:'Balap',
     deskripsi:'Mobilmu terus melaju. Geser jalur untuk menghindari kendaraan lain, ambil koin dan perisai, dan bertahan sejauh mungkin.',
     fitur:['Tema siang dan malam','Koin dan perisai','SFX'],
-    cover:'cover-balap-mobil.svg', tgl:'2026-11-13' },
+    cover:'cover-balap-mobil.png', tgl:'2026-11-13' },
+  { file:'tangkap-ayam.html', judul:'Tangkap Ayam', kategori:'Arcade',
+    deskripsi:'Ayam berlarian dengan lincah. Ketuk sebanyak mungkin sebelum waktu habis, awas ayam jago yang galak!',
+    fitur:['Kombo','Ayam emas','SFX'],
+    cover:'cover-tangkap-ayam.png', tgl:'2026-11-14' },
   // ↓ TAMBAHKAN GAME BARU DI SINI ↓
 ];
 
 const PAGE = 24;                       // jumlah kartu per tahap
-const EXTS = ['svg','png','jpg','jpeg','webp'];
+const EXTS = ['png','jpg','jpeg','webp','svg'];
 const $ = id => document.getElementById(id);
 const grid=$('grid'), chips=$('chips'), more=$('more');
 const state = { q:'', cat:'Semua', sort:'baru', shown:PAGE };
