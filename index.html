@@ -117,6 +117,10 @@ select{flex:none;font:600 14px system-ui,sans-serif;padding:8px 10px;border-radi
 @keyframes fd{from{opacity:0}}
 @keyframes pp{from{opacity:0;transform:translateY(10px) scale(.97)}}
 @media (prefers-reduced-motion:reduce){.mdl,.mdl .box{animation:none}}
+.wa{background:color-mix(in srgb,#25d366 13%,var(--bg));border:1.5px solid color-mix(in srgb,#25d366 55%,transparent);border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:13.5px;line-height:1.5}
+.wa p{margin:0}
+.wab{display:block;text-align:center;text-decoration:none;background:#25d366;color:#0b2e17;font:800 15px system-ui,sans-serif;padding:12px;border-radius:12px;margin-top:10px}
+footer a{color:inherit;text-decoration:underline}
 /* Slot "segera hadir" */
 .soon{display:flex;align-items:center;justify-content:center;text-align:center;min-height:170px;border:2px dashed var(--line);border-radius:16px;color:var(--mute);font-size:14px;font-weight:600;padding:16px}
 .more{display:block;margin:22px auto 0;font:700 15px system-ui,sans-serif;padding:12px 28px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -159,7 +163,7 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
   <button class="more" id="more" hidden>Muat lebih banyak</button>
 </main>
 
-<footer><div class="wrap">© <span id="yr"></span> PlayKuy · Portal game browser</div></footer>
+<footer><div class="wrap">© <span id="yr"></span> PlayKuy · Portal game browser<br><a href="https://wa.me/qr/EN4YGIQUXOESI1" target="_blank" rel="noopener">Hubungi kami lewat WhatsApp</a></div></footer>
 
 <button class="fab" type="button" data-kopi aria-haspopup="dialog" aria-label="Traktir Kopi"><span class="em" aria-hidden="true">☕</span><span>Traktir Kopi</span></button>
 
@@ -188,6 +192,10 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
       </div>
       <p class="mm sm">Nominal yang kamu pilih: <b id="kNom"></b>. QR ini hanya bisa dibayar pakai DANA. Isi nominalnya sendiri di aplikasi DANA setelah memindai. Halaman ini tidak memverifikasi pembayaran secara otomatis.</p>
       <div class="row2"><a class="alt" id="kDl" href="qr-dana.png" download="qr-dana-playkuy.png">Unduh QR</a><button class="alt" id="kBack" type="button">Ubah nominal</button></div>
+      <div class="wa">
+        <p>🎬 <b>Mau namamu disebut di awal animasi PlayKuy?</b><br>Setelah mengirim dukungan, kirim nama dan bukti transfer lewat WhatsApp. Namamu akan kami ucapkan terima kasih di animasi berikutnya.</p>
+        <a class="wab" href="https://wa.me/qr/EN4YGIQUXOESI1" target="_blank" rel="noopener">Kirim nama lewat WhatsApp</a>
+      </div>
       <button class="go" id="kClose2" type="button">Tutup</button>
     </div>
   </div>
