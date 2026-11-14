@@ -39,6 +39,18 @@ header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 8
 .hero p{margin:0;color:var(--mute);max-width:520px}
 .stats{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .stats span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.mascot{flex:none;height:150px;width:auto;margin-bottom:-4px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
+@media (min-width:700px){.mascot{height:280px}}
+.feat{margin:20px 0 6px}
+.featc{display:grid;grid-template-columns:1fr;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;text-decoration:none;box-shadow:var(--shadow)}
+@media (min-width:700px){.featc{grid-template-columns:1.1fr 1fr}}
+.featc .cv{aspect-ratio:5/3;border-radius:0}
+.featc .fb{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.featc .lb{align-self:flex-start;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font-weight:800;font-size:12px;letter-spacing:.6px;padding:4px 12px;border-radius:999px}
+.featc h2{margin:0;font-size:clamp(22px,5vw,30px);line-height:1.15}
+.featc p{margin:0;color:var(--mute);font-size:15px}
+.featc .go{align-self:flex-start;margin-top:6px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font-weight:800;padding:11px 26px;border-radius:999px;font-size:16px}
 
 /* Toolbar */
 .tools{display:flex;gap:10px;align-items:center;margin:18px 0 14px}
@@ -126,10 +138,14 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding:22px 0 calc(28px
 
 <main class="wrap">
   <section class="hero">
-    <h1>Main game seru, <em>langsung dari browser.</em></h1>
-    <p>Tanpa download, tanpa install. Pilih game, ketuk, dan mulai bermain di HP atau komputer.</p>
-    <div class="stats" id="stats"></div>
+    <div class="ht">
+      <h1>Main game seru, <em>langsung dari browser.</em></h1>
+      <p>Tanpa download, tanpa install. Pilih game, ketuk, dan mulai bermain di HP atau komputer.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <img class="mascot" src="kuyo-maskot.png" alt="Kuyo, maskot PlayKuy" onerror="this.remove()">
   </section>
+  <section id="feat" class="feat" hidden aria-label="Game terbaru"></section>
 
   <div class="tools">
     <div class="chips" id="chips" role="group" aria-label="Kategori game"></div>
@@ -223,6 +239,10 @@ const GAMES = [
     deskripsi:'Ayam berlarian dengan lincah. Ketuk sebanyak mungkin sebelum waktu habis, awas ayam jago yang galak!',
     fitur:['Kombo','Ayam emas','SFX'],
     cover:'cover-tangkap-ayam.png', tgl:'2026-11-14' },
+  { file:'bertahan-zombie.html', judul:'Bertahan dari Zombie', kategori:'Aksi',
+    deskripsi:'Zombie datang dari kejauhan. Ketuk untuk menembak, jaga barikade, naik level, dan kalahkan bos tiap 5 level.',
+    fitur:['Level','Bos','SFX'],
+    cover:'cover-bertahan-zombie.png', tgl:'2026-11-14' },
   // ↓ TAMBAHKAN GAME BARU DI SINI ↓
 ];
 
@@ -291,6 +311,19 @@ function render(){
   if (!list.length) grid.replaceChildren(el('div','empty','Tidak ada game yang cocok. Coba kata kunci atau kategori lain.'));
   const rest = list.length - part.length;
   more.hidden = rest <= 0; more.textContent = 'Muat lebih banyak ('+rest+')';
+  renderFeat(!!filtering);
+}
+/* Sorotan: game dengan tanggal terbaru (tgl atau update) */
+function renderFeat(hide){
+  const box = $('feat'); if (!GAMES.length) return;
+  box.hidden = !!hide; if (hide) return;
+  const g = GAMES.slice().sort((a,b)=>stamp(b).localeCompare(stamp(a)) || a.judul.localeCompare(b.judul,'id'))[0];
+  if (box.dataset.f === g.file) return; box.dataset.f = g.file;
+  const a = el('a','featc'); a.href = g.file; a.setAttribute('aria-label','Main '+g.judul);
+  const fb = el('div','fb'); fb.append(el('span','lb','✨ GAME TERBARU'), el('h2',null,g.judul));
+  if (g.deskripsi) fb.append(el('p',null,g.deskripsi));
+  fb.append(el('span','go','▶ Main sekarang'));
+  a.append(coverNode(g), fb); box.replaceChildren(a);
 }
 
 function buildChips(){
